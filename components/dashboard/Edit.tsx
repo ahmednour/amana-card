@@ -1,0 +1,58 @@
+import { Button } from "@/components/ui/button"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { GoPencil } from "react-icons/go";
+
+export function Edit({id, title, description, cover, images}) {
+    return (
+        <Dialog>
+            <DialogTrigger asChild>
+                <button className="text-gray-500" aria-label="Edit">
+                    <GoPencil size={20} />
+                </button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[600px] bg-white">
+                <DialogHeader>
+                    <DialogTitle>تعديل المناسبة</DialogTitle>
+                    <DialogDescription>
+                       يمكنك تعديل المناسبة بالضغط على الحقل المطلوب , ثم الضغط على حفظ التعديلات
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="name" className="text-right">
+                            Name
+                        </Label>
+                        <Input
+                            id="name"
+                            defaultValue="Pedro Duarte"
+                            className="col-span-3"
+                        />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="username" className="text-right">
+                            Username
+                        </Label>
+                        <Input
+                            id="username"
+                            defaultValue="@peduarte"
+                            className="col-span-3"
+                        />
+                    </div>
+                </div>
+                <DialogFooter>
+                    <Button type="submit">Save changes</Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    )
+}

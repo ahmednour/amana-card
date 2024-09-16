@@ -29,24 +29,30 @@ import { useState, useEffect, useRef, useMemo } from "react";
 
 import Form from "@/components/form/Form"; // Changed to lowercase 'form'
 import NextImage from "next/image";
-import bg4 from "../../public/bg4.jpg";
-import logo from "../../public/Najran-Municipality.svg";
+import bg4 from "public/bg4.jpg";
+import logo from "public/Najran-Municipality.svg";
 import { useSearchParams } from "next/navigation";
 export default function Home() {  
     const searchParams = useSearchParams();
     const title = searchParams.get("title");
-    const bgImages = searchParams.get("bgImages");
-    console.log(title, bgImages);
+    const bgImages = searchParams.get("bgImages") ? JSON.parse(searchParams.get("bgImages")!) : null;
+    console.log(title, bgImages[0].attributes.url);
 
     // This line creates a memoized array of images using the useMemo hook
     // useMemo is used to optimize performance by memoizing the result of expensive computations
     // In this case, it's creating an array containing bg4 and bg5 (which are likely image imports)
     // The empty dependency array [] means this array will only be created once when the component mounts
     // and will not be recreated on subsequent re-renders unless bg4 or bg5 change
+    interface ImageType {
+        attributes: {
+            url: string;
+        };
+    }
+    console.log(bgImages);
     const images = useMemo(() => {
-        return bgImages ? bgImages.split(',') : [bg4.src];
+        return bgImages ? bgImages.map((img: ImageType) => ({ attributes: { url: img.attributes.url } })) : [];
     }, [bgImages]);
-
+    
     // This line initializes a state variable data with an empty string
     // useState is a hook that allows functional components to have state
     const [data, setData] = useState('');
@@ -110,16 +116,17 @@ export default function Home() {
             title: "عاين البطاقة وحملها",
         },
     ];
+    
     // select card template
-    const selectCardTemplate = images.map((img, i) => (        
+    const selectCardTemplate = images.map((img: ImageType, i) => (        
         <NextImage
-            src={img}
+            src={`http://localhost:1337${img.attributes.url}`}
             id={(i + 1).toString()}
             key={i}
             priority
             alt="cardImage"
             onClick={() => {
-                setSelectedImage(img);
+                setSelectedImage(img.attributes.url);
                 setActive(i);
                 setClickedId(i + 1);
             }}
@@ -128,10 +135,11 @@ export default function Home() {
             className={`h-[238.25px] w-[336px] cursor-pointer ${isActive === i ? "border-[#cbe44c] border-[2px]" : ""}`}
         />
     ));
+    
     return (
         <div className="lg:max-w-4xl mx-auto pt-20">
             <NextImage
-                src={logo}
+                src="/Najran-Municipality.svg"
                 alt="logo"
                 width="200"
                 height="100"

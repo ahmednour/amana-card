@@ -1,43 +1,38 @@
 "use client";
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { getCards } from '../_utils/cardApis';
+interface Image {
+  data: {
+    id: number;
+    attributes: {
+      url: string;
+    };
+  };
+}
 
-const cards = [
-  {
-    title: "شهر رمضان",
-    description: "معايدة للعاملين في المؤسسة",
-    images: [
-      "/bg.jpg",
-      "/bg2.jpg",
-      "/bg3.jpg",
-    ]
-  },
-  {
-    title: "عيد الفطر والأضحى",
-    description: "معايدة للعاملين في المؤسسة",
-    images: [
-      "/bg4.jpg",
-      "/bg5.jpg",
-    ]
-  },
-  {
-    title: "اليوم الوطني",
-    description: "معايدة للعاملين في المؤسسة",
-    images: [
-      "/bg4.jpg",
-      "/bg5.jpg",
-    ]
-  },
-  {
-    title: "يوم التأسيس",
-    description: "معايدة للعاملين في المؤسسة",
-    images: [
-      "/bg.jpg",
-      "/bg2.jpg",
-      "/bg3.jpg",
-    ]
-  },
-]
+interface Card {
+  id: number;
+  attributes: {
+    title: string;
+    titleSmall: string;
+    images: {
+      data: Image[];
+    };   
+  };
+}
+
 export default function Home() {
+  const [cards, setCards] = useState<Card[]>([]);
+  const getAllCards = async () => {
+    getCards().then((res) => {
+      console.log(res.data);
+      setCards(res.data);
+    });
+  }
+  useEffect(() => {
+    getAllCards();    
+  }, []);
 
   return (
     <div className="container mx-auto px-4">
@@ -46,11 +41,12 @@ export default function Home() {
         <span>الرجاء إختيار المناسبة </span>
         <div className="grid gap-[1rem] p-[1rem] md:grid-cols-2 lg:grid-cols-4">
          {cards.map((card, index) => (
-          <div key={index} className="card">
+          
+          <div key={index} className="card">            
             <div className="content">
-              <h2 className="title">{card.title}</h2>
-              <p className="copy">{card.description}</p>
-              <Link href={{ pathname: '/holiday', query: { title: card.title, bgImages: JSON.stringify(card.images) } }} className="btn">إنشاء كارت</Link>
+              <h2 className="title">{card.attributes.title}</h2>
+               <p className="copy">{card.attributes.titleSmall}</p>
+               <Link href={{ pathname: '/holiday', query: { title: card.attributes.title, bgImages: JSON.stringify(card.attributes.images.data) } }} className="btn">إنشاء كارت</Link>
             </div>
           </div>
          ))}
