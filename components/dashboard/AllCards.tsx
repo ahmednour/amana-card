@@ -24,9 +24,9 @@ const AllCards = () => {
         <div className="container mx-auto">
             {/* Add New Card */}
             <AddNew setCards={setCards}/>       
-            {cards.map((card: Card) => (
-                <div key={card.id} className='w-full bg-white shadow rounded-lg flex flex-row items-center justify-between gap-4 mb-3 border-b-2 border-gray-300 py-3 px-5'>
-                    <div className='text-gray-500 text-lg font-bold'>{card.id}</div>
+            {cards.map((card: Card , index: number) => (
+                <div key={index} className='w-full bg-white shadow rounded-lg flex flex-row items-center justify-between gap-4 mb-3 border-b-2 border-gray-300 py-3 px-5'>
+                    <div className='text-gray-500 text-lg font-bold'>{index + 1}</div>
                     <div className='h-10 w-10 mb-3'>
                         <Image src={`http://localhost:1337${card.attributes.cover.data.attributes.url}`} alt="" width={500} height={300} />
                     </div>
@@ -40,12 +40,13 @@ const AllCards = () => {
                     </div>
                     <p className='w-1/4 text-sm text-gray-500'>{card.attributes.titleSmall}</p>
                     <div className='flex flex-row gap-4'>
-                        <Edit 
-                            id={card.id} 
+                        <Edit
+                            id={card.id}                             
                             title={card.attributes.title} 
-                            description={card.attributes.titleSmall} 
+                            titleSmall={card.attributes.titleSmall} 
                             cover={card.attributes.cover.data.attributes.url} 
-                            images={card.attributes.images.data} 
+                            images={card.attributes.images.data.map((image: { attributes: { url: string } }) => image.attributes.url)}
+                            setCards={setCards}
                         />
                         <Confirm id={card.id}  setCards={setCards}/>
                     </div>
