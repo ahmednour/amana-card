@@ -16,13 +16,13 @@ import { GoTrash } from "react-icons/go";
 import { deleteCard, getCards } from "@/_utils/cardApis";
 import { Card } from "@/_utils/types"; // Adjust the import path as needed
 
-export function Confirm({id, setCards}: {id: number, setCards: (cards: Card[]) => void}) {
+export function Confirm({ documentId, setCards }: { documentId: string, setCards: (cards: Card[]) => void}) {
     const [open, setOpen] = useState(false);
     const router = useRouter();
 
     const deleteHandle = useCallback(async () => {
         try {           
-            await deleteCard(id);
+            await deleteCard(documentId);
             setOpen(false); 
             const response = await getCards();
             setCards(response.data);
@@ -30,7 +30,7 @@ export function Confirm({id, setCards}: {id: number, setCards: (cards: Card[]) =
         } catch (error) {
             console.error("Error deleting card:", error);
         }
-    }, [id, router, setCards]);
+    }, [documentId, router, setCards]);
 
     const handleOpenChange = useCallback((newOpen: boolean) => {
         setOpen(newOpen);

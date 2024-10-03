@@ -6,6 +6,6 @@
       "public/*": ["./public/*"]
     }
   },
-  "include": ["**/*.js", "**/*.jsx"],
+  "include": ["**/*.js", "**/*.jsx", "_utils/cardApis.tsx"],
   "exclude": ["node_modules"]
 }

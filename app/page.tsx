@@ -1,7 +1,7 @@
 "use client";
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { getCards } from '../_utils/cardApis';
+import { getCards } from '../_utils/cardApis.tsx';
 interface Image {
   data: {
     id: number;
@@ -13,12 +13,10 @@ interface Image {
 
 interface Card {
   id: number;
-  attributes: {
-    title: string;
-    titleSmall: string;
-    images: {
-      data: Image[];
-    };   
+  title: string;
+  titleSmall: string;
+  images: {
+    data: Image[];
   };
 }
 
@@ -31,7 +29,7 @@ export default function Home() {
     });
   }
   useEffect(() => {
-    getAllCards();    
+    getAllCards();
   }, []);
 
   return (
@@ -40,18 +38,18 @@ export default function Home() {
         <h1 className="text-4xl font-bold">كارت معايده </h1>
         <span>الرجاء إختيار المناسبة </span>
         <div className="grid gap-[1rem] p-[1rem] md:grid-cols-2 lg:grid-cols-4">
-         {cards.map((card, index) => (
-          
-          <div key={index} className="card">            
-            <div className="content">
-              <h2 className="title">{card.attributes.title}</h2>
-               <p className="copy">{card.attributes.titleSmall}</p>
-               <Link href={{ pathname: '/holiday', query: { title: card.attributes.title, bgImages: JSON.stringify(card.attributes.images.data) } }} className="btn">إنشاء كارت</Link>
+          {cards.map((card, index) => (
+
+            <div key={index} className="card">
+              <div className="content">
+                <h2 className="title">{card.title}</h2>
+                <p className="copy">{card.titleSmall}</p>
+                <Link href={{ pathname: '/holiday', query: { title: card.title, bgImages: JSON.stringify(card.images.data) } }} className="btn">إنشاء كارت</Link>
+              </div>
             </div>
-          </div>
-         ))}
+          ))}
         </div>
       </div>
-   </div>
+    </div>
   );
 }

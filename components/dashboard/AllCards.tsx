@@ -14,9 +14,8 @@ const AllCards = () => {
     const [cards, setCards] = useState<Card[]>([])
    
     useEffect(() => {
-        getCards().then((res) => {
-            console.log(res.data)
-            setCards(res.data)
+        getCards().then((res) => {           
+            setCards(res.data);
         })
     },[]);
     
@@ -28,27 +27,29 @@ const AllCards = () => {
                 <div key={index} className='w-full bg-white shadow rounded-lg flex flex-row items-center justify-between gap-4 mb-3 border-b-2 border-gray-300 py-3 px-5'>
                     <div className='text-gray-500 text-lg font-bold'>{index + 1}</div>
                     <div className='h-10 w-10 mb-3'>
-                        <Image src={`http://localhost:1337${card.attributes.cover.data.attributes.url}`} alt="" width={500} height={300} />
+                        <Image src={`http://localhost:1337${card.cover.url}`} alt="" width={500} height={300} />
                     </div>
-                    <p className='w-1/4 text-lg font-bold'>{card.attributes.title}</p>
+                    <p className='w-1/4 text-lg font-bold'>{card.title}</p>
                     <div className='w-1/4 flex space-x-2 items-center flex-col md:flex-row'>
                         <div className='flex -space-x-2 overflow-hidden p-2'>
-                            {card.attributes.images.data.map((cardImage: { attributes: { url: string } }, index: number) => (
-                                <Image key={index} src={`http://localhost:1337${cardImage.attributes.url}`} alt="" width={500} height={300} className='inline-block h-10 w-10 rounded-full ring-2 ring-gray-200 hover:scale-105 tranform duration-100 cursor-pointer' />
+                            {card.images.map((cardImage: {  url: string }, index: number) => (
+                                <Image key={index} src={`http://localhost:1337${cardImage.url}`} alt="" width={500} height={300} className='inline-block h-10 w-10 rounded-full ring-2 ring-gray-200 hover:scale-105 tranform duration-100 cursor-pointer' />
                             ))}
                         </div>
                     </div>
-                    <p className='w-1/4 text-sm text-gray-500'>{card.attributes.titleSmall}</p>
+                    <p className='w-1/4 text-sm text-gray-500'>{card.titleSmall}</p>
                     <div className='flex flex-row gap-4'>
                         <Edit
-                            id={card.id}                             
-                            title={card.attributes.title} 
-                            titleSmall={card.attributes.titleSmall} 
-                            cover={card.attributes.cover.data.attributes.url} 
-                            images={card.attributes.images.data.map((image: { attributes: { url: string } }) => image.attributes.url)}
-                            setCards={setCards}
+                            id={card.id} 
+                            documentId={card.documentId}                            
+                            title={card.title} 
+                            titleSmall={card.titleSmall} 
+                            cover={{url: card.cover.url}} 
+                            onUpdate={() => {}}
+                            images={card.images}
+                            
                         />
-                        <Confirm id={card.id}  setCards={setCards}/>
+                        <Confirm documentId={card.documentId}  setCards={setCards}/>
                     </div>
                 </div>
             ))}
